@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.ion()
 from raysect.core import World
+from raysect.primitive import Mesh
+from raysect.optical import AbsorbingSurface
 
 from cherab.tools.observers import find_wall_intersection
-from cherab.aug.machine import plot_aug_wall_outline, import_mesh_segment, VESSEL, PSL, ICRH, DIVERTOR, A_B_COILS
+from cherab.aug.machine import plot_aug_wall_outline, import_aug_mesh
 from cherab.aug.bolometry import FDC_TUBE, FLX_TUBE, FVC_TUBE, FHS_TUBE, load_default_bolometer_config
 
 
@@ -19,7 +21,11 @@ def plot_detectors(camera, world):
         centre_point = detector.centre_point
         sightline_vec = centre_point.vector_to(detector._slit.centre_point)
 
-        hit_point = find_wall_intersection(world, centre_point, sightline_vec)
+        try:
+            intersection = find_wall_intersection(world, centre_point, sightline_vec)
+            hit_point = intersection[0]
+        except ValueError:
+            hit_point = centre_point + sightline_vec.normalise() * 2
 
         # Traverse the ray with equation for a parametric line,
         # i.e. t=0->1 traverses the ray path.
@@ -47,8 +53,7 @@ def plot_detectors(camera, world):
 
 
 full_world = World()
-FULL_MESH_SEGMENTS = VESSEL + PSL + ICRH + DIVERTOR + A_B_COILS
-import_mesh_segment(full_world, FULL_MESH_SEGMENTS)
+import_aug_mesh(full_world, material=AbsorbingSurface())
 
 fhc = load_default_bolometer_config('FHC', parent=full_world)
 plot_detectors(fhc, full_world)
@@ -57,21 +62,21 @@ flh = load_default_bolometer_config('FLH', parent=full_world)
 plot_detectors(flh, full_world)
 
 fhs_world = World()
-import_mesh_segment(fhs_world, FHS_TUBE)
+Mesh.from_file(FHS_TUBE[0], parent=fhs_world, material=AbsorbingSurface())
 fhs = load_default_bolometer_config('FHS', parent=fhs_world)
 plot_detectors(fhs, fhs_world)
 
 fvc_world = World()
-import_mesh_segment(fvc_world, FVC_TUBE)
+Mesh.from_file(FVC_TUBE[0], parent=fvc_world, material=AbsorbingSurface())
 fvc = load_default_bolometer_config('FVC', parent=fvc_world)
 plot_detectors(fvc, fvc_world)
 
 fdc_world = World()
-import_mesh_segment(fdc_world, FDC_TUBE)
+Mesh.from_file(FDC_TUBE[0], parent=fdc_world, material=AbsorbingSurface())
 fdc = load_default_bolometer_config('FDC', parent=fdc_world)
 plot_detectors(fdc, fdc_world)
 
 flx_world = World()
-import_mesh_segment(flx_world, FLX_TUBE)
+Mesh.from_file(FLX_TUBE[0], parent=flx_world, material=AbsorbingSurface())
 flx = load_default_bolometer_config('FLX', parent=flx_world)
 plot_detectors(flx, flx_world)
