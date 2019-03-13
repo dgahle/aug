@@ -7,6 +7,26 @@ from raysect.optical import World, AbsorbingSurface
 from cherab.aug.machine import plot_aug_wall_outline, import_aug_mesh
 from cherab.aug.bolometry import FDC_TUBE, FLX_TUBE, FVC_TUBE, FHS_TUBE
 from cherab.aug.bolometry import load_bolometer, load_voxel_grid
+from cherab.aug.bolometry.load_bolometers import AUG_2D_TO_CHERAB_1D_GRID_MASK
+
+
+def write_sensitivity(sensitivities, filename):
+
+    with open(filename, 'w') as fh:
+
+        k = 0
+        for i in range(83):
+
+            line = []
+            for j in range(45):
+
+                if AUG_2D_TO_CHERAB_1D_GRID_MASK[i, j]:
+                    line.append('{:.10g}'.format(sensitivities[k]))
+                    k += 1
+                else:
+                    line.append('{:.10g}'.format(0.0))
+
+            fh.write(", ".join(line) + "\n")
 
 
 plt.ion()
@@ -20,6 +40,7 @@ flx = load_bolometer('FLX', parent=flx_world)
 for detector in flx:
     print('calculating detector {}'.format(detector.name))
     sensitivity = detector.calculate_sensitivity(grid)
+    write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
     # np.save('{}_sensitivity'.format(detector.name), sensitivity)
     plt.figure()
     plot_aug_wall_outline()
@@ -36,6 +57,7 @@ fdc = load_bolometer('FDC', parent=fdc_world)
 for detector in fdc:
     print('calculating detector {}'.format(detector.name))
     sensitivity = detector.calculate_sensitivity(grid)
+    write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
     # np.save('{}_sensitivity'.format(detector.name), sensitivity)
     plt.figure()
     plot_aug_wall_outline()
@@ -52,6 +74,7 @@ fvc = load_bolometer('FVC', parent=fvc_world)
 for detector in fvc:
     print('calculating detector {}'.format(detector.name))
     sensitivity = detector.calculate_sensitivity(grid)
+    write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
     # np.save('{}_sensitivity'.format(detector.name), sensitivity)
     plt.figure()
     plot_aug_wall_outline()
@@ -68,6 +91,7 @@ fhs = load_bolometer('FHS', parent=fhs_world)
 for detector in fhs:
     print('calculating detector {}'.format(detector.name))
     sensitivity = detector.calculate_sensitivity(grid)
+    write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
     # np.save('{}_sensitivity'.format(detector.name), sensitivity)
     plt.figure()
     plot_aug_wall_outline()
@@ -86,6 +110,7 @@ plt.close('all')
 # for detector in fhc:
 #     print('calculating detector {}'.format(detector.detector_id))
 #     sensitivity = detector.calculate_sensitivity(grid)
+#     write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
 #     # np.save('{}_sensitivity'.format(detector.name), sensitivity)
 #     plt.figure()
 #     plot_aug_wall_outline()
@@ -98,6 +123,7 @@ plt.close('all')
 # for detector in flh:
 #     print('calculating detector {}'.format(detector.detector_id))
 #     sensitivity = detector.calculate_sensitivity(grid)
+#     write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
 #     np.save('{}_sensitivity'.format(detector.name), sensitivity)
 #     plt.figure()
 #     plot_aug_wall_outline()
