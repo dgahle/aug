@@ -63,7 +63,8 @@ def load_bolometer(bolometer_id, parent=None):
         dy = float(slit_data[11])
         dz = float(slit_data[12])
 
-        slit_objects[slit_id] = BolometerSlit(slit_id, centre_point, basis_x, dx, basis_y, dy, dz, parent=bolometer_camera)
+        slit_objects[slit_id] = BolometerSlit(slit_id, centre_point, basis_x, dx, basis_y, dy, dz,
+                                              parent=bolometer_camera, csg_aperture=True)
 
     for i in range(num_foils):
         foil_data = foils[i]
@@ -100,7 +101,7 @@ def load_voxel_grid(parent=None, name=None):
         v4 = Point2D(voxel['p4'][0], voxel['p4'][1])
         voxel_coordinates.append((v1, v2, v3, v4))
 
-    voxel_grid = ToroidalVoxelGrid(voxel_coordinates, parent=parent, name=name)
+    voxel_grid = ToroidalVoxelGrid(voxel_coordinates, parent=parent, name=name, primitive_type='csg')
 
     return voxel_grid
 
