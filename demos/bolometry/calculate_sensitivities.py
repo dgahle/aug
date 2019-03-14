@@ -108,7 +108,7 @@ plt.close('all')
 # # Calculate FHC camera sensitivities
 # fhc = load_bolometer('FHC', parent=full_world)
 # for detector in fhc:
-#     print('calculating detector {}'.format(detector.detector_id))
+#     print('calculating detector {}'.format(detector.name))
 #     sensitivity = detector.calculate_sensitivity(grid)
 #     write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
 #     # np.save('{}_sensitivity'.format(detector.name), sensitivity)
@@ -121,7 +121,7 @@ plt.close('all')
 # # Calculate FLH camera sensitivities
 # flh = load_bolometer('FLH', parent=full_world)
 # for detector in flh:
-#     print('calculating detector {}'.format(detector.detector_id))
+#     print('calculating detector {}'.format(detector.name))
 #     sensitivity = detector.calculate_sensitivity(grid)
 #     write_sensitivity(sensitivity, '{}_sensitivity.txt'.format(detector.name))
 #     np.save('{}_sensitivity'.format(detector.name), sensitivity)

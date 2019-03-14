@@ -33,8 +33,8 @@ def load_bolometer(bolometer_id, parent=None):
         foils = _load_csv(os.path.join(_DATA_PATH, 'detectors/FHC_foils.csv'))
         slits = _load_csv(os.path.join(_DATA_PATH, 'detectors/FHC_slits.csv'))
     elif bolometer_id == 'FHS':
-        foils = _load_csv(os.path.join(_DATA_PATH, 'detectors/FHC_foils.csv'))
-        slits = _load_csv(os.path.join(_DATA_PATH, 'detectors/FHC_slits.csv'))
+        foils = _load_csv(os.path.join(_DATA_PATH, 'detectors/FHS_foils.csv'))
+        slits = _load_csv(os.path.join(_DATA_PATH, 'detectors/FHS_slits.csv'))
     elif bolometer_id == 'FLH':
         foils = _load_csv(os.path.join(_DATA_PATH, 'detectors/FLH_foils.csv'))
         slits = _load_csv(os.path.join(_DATA_PATH, 'detectors/FLH_slits.csv'))
